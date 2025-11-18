@@ -1,3 +1,7 @@
+# ---------------------------------------------------------------------
+# IMPORTED FUNCTIONS USED IN PROGRAM
+# ---------------------------------------------------------------------
+
 import time
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -5,47 +9,64 @@ import numpy as np
 
 csv_in_use = "historicalData.csv"
 date_column = "Date"
-y_axis = "Close/Last"
+price_change_column = "Close/Last"
+
 # colors for plots
 colour_1 = "#2596be"
 colour_2 = "#e63946"
 
-# daily change = todays closing price - yesterdays closing price
+## ---------------------------------------------------------------------
+# FUNCTION: Read CSV data into DataFrame
+# ---------------------------------------------------------------------
+
 def read_nordic_data():
-    '''
-    reads historicalData.csv file and parses the year column as a date and sets it as an index
-    '''
+    
+    """
+
+    Reads historicalData.csv file and converts to Dandas dataframe
+
+    Returns
+    -------
+
+    pandas Dataframe -> Returns fertility df with saved date_column variable as the index
+
+    """
    
     nordic_df = pd.read_csv(csv_in_use , parse_dates=[date_column],  index_col=date_column)
     return nordic_df
 
 df = read_nordic_data()
 
+# ---------------------------------------------------------------------
+# FUNCTION: Add daily price change column
+# ---------------------------------------------------------------------
 
-def add_daily_price_change( column="Close/Last"):
+def add_daily_price_change(column=price_change_column):
     """
+
+    Calculates difference between variables in price_change_column
+
+    Returns
+    -------
+
+    pandas Dataframe -> Returns df with added column "Daily Price Change"
+
     """
-    
+
+    ## Daily Price change = value today - value yesteday
     df["Daily Price Change"] = df[column].diff()
+
     return df
 
 df = add_daily_price_change()
 
-
+# Convert Daily Price Change column to numpy array and remove missing value in first row
 daily_change_array = df["Daily Price Change"].dropna().to_numpy()
 
 
-# # Time the NumPy sort
-# start = time.time()
-# sorted_array = np.sort(daily_change_array)
-# end = time.time()
 
-# print("Sorted NumPy array (first 7 values):")
-# print(sorted_array[:7])
-# print(f"\nIt took {end - start:.6f} seconds to sort the array using NumPy.")
-
-sizes = []
-times = []
+sizes = [] # List of sample sizes tested
+times = [] # Sorting times
 
 for n in range (7,366):
     sample = daily_change_array[:n]
@@ -72,3 +93,11 @@ plt.xlabel("Number of Elements (n)")
 plt.ylabel("Time Taken (seconds)")
 plt.grid(True)
 plt.show()
+
+
+if __name__ == "__main__":
+
+
+    polynomial_best_fit(x , y, 0.05*y)
+
+    bayesian_infromation_crtierion(x, y, 0.05*y)
