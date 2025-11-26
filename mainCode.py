@@ -96,8 +96,4 @@ plt.show()
 
 
 if __name__ == "__main__":
-
-
-    polynomial_best_fit(x , y, 0.05*y)
-
-    bayesian_infromation_crtierion(x, y, 0.05*y)
+    add_daily_price_change(price_change_column)
