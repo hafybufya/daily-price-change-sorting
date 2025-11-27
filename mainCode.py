@@ -58,42 +58,43 @@ def add_daily_price_change(column=price_change_column):
 
     return df
 
-df = add_daily_price_change()
+df = add_daily_price_change(price_change_column)
 
 # Convert Daily Price Change column to numpy array and remove missing value in first row
 daily_change_array = df["Daily Price Change"].dropna().to_numpy()
 
 
+def plot_graph(numpy_array):
+    sizes = [] # List of sample sizes tested
+    times = [] # Sorting times
 
-sizes = [] # List of sample sizes tested
-times = [] # Sorting times
+    for n in range (7,366):
+        sample = numpy_array[:n]
+        start = time.time()
+        np.sort(sample)
+        end = time.time()
+        sizes.append(n)
+        times.append(end - start)
 
-for n in range (7,366):
-    sample = daily_change_array[:n]
-    start = time.time()
-    np.sort(sample)
-    end = time.time()
-    sizes.append(n)
-    times.append(end - start)
+    # Plot of results
+    n_values_arr = np.array(sizes)
+    nlogn = n_values_arr * np.log(n_values_arr)
 
-# Plot of results
-n_values_arr = np.array(sizes)
-nlogn = n_values_arr * np.log(n_values_arr)
+    # Normalise nlogn to match scale of data
+    nlogn_scaled = nlogn / nlogn.max() * max(times)
 
-# Normalise nlogn to match scale of data
-nlogn_scaled = nlogn / nlogn.max() * max(times)
+    # Plot of results
 
-# Plot of results
-
-plt.figure(figsize=(8, 5))
-plt.plot(sizes, times, linestyle='-', color=colour_1 )
-plt.plot(sizes, nlogn_scaled, label="Theoretical O(n log n)", color=colour_2, linestyle="--")
-plt.title("Time Taken to Sort n Elements with NumPy sort")
-plt.xlabel("Number of Elements (n)")
-plt.ylabel("Time Taken (seconds)")
-plt.grid(True)
-plt.show()
+    plt.figure(figsize=(8, 5))
+    plt.plot(sizes, times, linestyle='-', color=colour_1 )
+    plt.plot(sizes, nlogn_scaled, label="Theoretical O(n log n)", color=colour_2, linestyle="--")
+    plt.title("Time Taken to Sort n Elements with NumPy sort")
+    plt.xlabel("Number of Elements (n)")
+    plt.ylabel("Time Taken (seconds)")
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == "__main__":
     add_daily_price_change(price_change_column)
+    plot_graph(daily_change_array)
