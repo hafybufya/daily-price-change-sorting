@@ -11,7 +11,7 @@ csv_in_use = "historicalData.csv"
 date_column = "Date"
 price_change_column = "Close/Last"
 
-# colors for plots
+# Colours for plots
 colour_1 = "#2596be"
 colour_2 = "#e63946"
 
