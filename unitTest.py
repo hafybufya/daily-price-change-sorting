@@ -59,4 +59,3 @@ if __name__ == "__main__":
     unittest.main()
 
 
-# y = 4.07x -0.67
